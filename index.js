@@ -125,23 +125,31 @@ app.post('/whatsapp', async function(req, res) {
 	 && response[0].queryResult.fulfillmentText != 'problem-description' && response[0].queryResult.fulfillmentText != 'all-ok') {
 		console.log('responses : ', response);
 		let solutions = []
-
-		await axios.get(`${botAPI}/botSolutions`)
+		let payload = {phoneNumber: from.split(':')[1], platform: from.split(':')[0] }
+		await axios.post(`${botAPI}/user-solutions/`, payload)
 		.then(async resp =>  {
-			//console.log('cool bot solutions : ', resp.data);
+			console.log('cool bot solutions : ', resp.data);
 			solutions = resp.data
 			let displaySolutions = '\n'
 			let counter = 1;
-			solutions.reverse().forEach(element => {
-				displaySolutions+= element.id+' - '+element.name+' \n'
-				//counter++
-			});
-			await twilioClient.messages.create({
-				from: to,
-				to: from,
-				body: 'Faites un choix parmi ces solutions : '+displaySolutions
-				//body: `Your next emi of ${dueAmount} is on ${dueDate.toDateString()}.`
-			});
+			if(solutions.length > 0){
+				solutions.reverse().forEach(element => {
+					displaySolutions+= element.id+' - '+element.name+' \n'
+					//counter++
+				});
+				await twilioClient.messages.create({
+					from: to,
+					to: from,
+					body: 'Faites un choix parmi ces solutions : '+displaySolutions
+				});
+			}else{
+				await twilioClient.messages.create({
+					from: to,
+					to: from,
+					body: "Votre entreprise n'a pas encore de solutions enregistrées🤦🏿‍♂️"
+				});
+			}
+			
 			//agent.add('The Transfert is done successfully');
 		})
 		.catch(async err => {
@@ -212,7 +220,7 @@ app.post('/whatsapp', async function(req, res) {
 			await twilioClient.messages.create({
 				from: to,
 				to: from,
-				body: `Merci, vous avez choisi la catégorie ${allActions.category} de la  solution ${allActions.solution}. Un technicien vous contactera dans les brefs délais pour résoudre votre problème!`
+				body: `Merci, vous avez choisi la catégorie ${allActions.category} de la  solution ${allActions.solution}. Un technicien vous contactera dans les brefs délais pour résoudre votre problème!✅`
 				//body: `Your next emi of ${dueAmount} is on ${dueDate.toDateString()}.`
 			});
 
