@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "moozi-support-m9dc",
+  "private_key_id": "cb9d84cb2194fe5772b23a1826476ccfe8ca405b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCRa4dEc6kGxev8\na1sWrvlcKKF0VsoWN9gFmNfCb+4dNOdqLqCIwJ8elESwTdA14BqCVHES6ECaBG2S\nIhKrVgDH+qrGshZifSxoDKaexu40OI75JYVjgHf/18KMuMflnzgoX+IwXlHn2J+M\nqaAo4T73jrrt0dp5LUnAyt8znzcl/dg3v69qtjh82oaP34giZPtMJdaOk4j1lDIN\n7fnxjmaNKklcfZNEVuPQ2H/fHRrzooirsWv4W/nw0zsfz8U3/CQxFX1sz9ApkWJz\nsFNUV3o+VwxyYnH7RNGGwhi6dyIAPvoL+u77NOlaLTHcDtWk0RNMPWcgioaPr+Hp\n6oPi4WPrAgMBAAECggEAIEnPUYgazimxEa1mnr1AGdHds363xUImAWwj8AS5Spve\nDCoJNAQM8JW8QKcuZV/6ktib+LY/7dKw34MYQRnJ9501QQP2y2x+qSWx80w5RLgQ\nKsrFeMfkHRbzmBpJLDdzmSddCh9PMVrcZjedm6YTvJTg9YAkccZ3+0owT/54mMMU\nBxoDEZfQpaG2/+W8NIKCBkXwNvv007UOQisfpGtmHfpuGptZXmappeeu2J2Cojlp\nGB9aIdUDeiRAH0rhx7eOBjoQkbe+x/7nE3M6bcfskvSb5bCEwfu38x++oO7DGwCG\na75yGPspDN8FK2C5nqNe5l+B0qSfoCI74tLJq1jFFQKBgQDEHf/xgyuRkfGiw4+3\n8FLNbKNO9MRsDEfs1kNS4sq4llIdmiWSlKeEK7bs8jKSctttwQVnIVK+hcmsKJK2\ngkhg41o0J1eCGBv9RSmVQHaokcdOE65o06bEBnzPfonRbFOmn/BrYOsT2mW1v7ty\nBM3paWMS3NGdTRdRDcnyvG2MPwKBgQC90qf/WzBut/14kZVPtj26spZtXxlmwPXA\nCW9i2Z27QfbgpYKakuui8daW56rRIVzvvB9lZOskpoOjZiAJe6Y0GB3GD2SuKf0E\nGV2jqX0vdnp1hawsOcqCuVIASqvuTOdwcfsfjeqNKo8buxxDNEHfQPCvnuf5xnAj\nNCGvK3VtVQKBgFwosNaASmAM0h0ngwjv8SlBjPiUgx03JDGCen6fvp3BXfM1NcTN\nAG9Wz45HPkadnMnVs8FD4otPeXbiVhdX38VP8VqixjeHNtfswV62vUv3vU3OZ94w\n36QsXEhxcTgtjJ23eRYspCtfLP6ci+xHn6+462q4w/QEfxmCvkzICT6nAoGAKDhA\nPEzYAD2fyTIfjtowTiSU1uu1eB4ec+gL38f4MbsSUhr/hzzmDIptS2Aew1zsUids\nB5HQeN2HOtHiq9+1IYiSlmqgjH59C6dMPecljS7vV4NRLbW5AOW/SCyKLV3CFAMy\nkEcDkZGY7OlCXcLuyhz6YlurDzNKg0sCcBknMlkCgYAbCO4SWhVRU+XX5whG1nc0\ndKfM/98eR8qAJw8Ru5qQM5PV8dEwEvyJK3fP9eOrsUpEPHJck6NGWcy3z/oNPCZ5\n7VeUWFyn9GKUemrbnDYjV/K9jV2s8XpjZ7lkEKn/yR4cusnF91Adnktnc+GPqHJW\nQUymQjl5Vgsu80TmEDmrwA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflow-client-api@moozi-support-m9dc.iam.gserviceaccount.com",
+  "client_id": "103127332270171033133",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflow-client-api%40moozi-support-m9dc.iam.gserviceaccount.com"
+}
