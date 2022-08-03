@@ -260,9 +260,6 @@ app.post('/whatsapp', async function(req, res) {
 		return
 
 	}
-
-	console.log('action 3 : ', response[2].queryResult.action);
-
 	// handle emi due date action
 	if(response[0].queryResult.action == 'emi.due-date') {
 		// fake emi date and amount
