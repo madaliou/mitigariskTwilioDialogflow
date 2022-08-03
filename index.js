@@ -154,7 +154,11 @@ app.post('/whatsapp', async function(req, res) {
 		})
 		.catch(async err => {
 			console.log('pas coolhhhh : ', err);
-			
+			await twilioClient.messages.create({
+				from: to,
+				to: from,
+				body: err.response.data.message ? `${err.response.data.message}` : "Une erreur est survenue!🤦🏿"
+			});
 			//agent.add( err.response.data.message ? `${err.response.data.message}` : 'An error occured!!');
 		});
 
