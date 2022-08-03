@@ -215,6 +215,7 @@ app.post('/whatsapp', async function(req, res) {
 				body: `Merci, vous avez choisi la catégorie ${allActions.category} de la  solution ${allActions.solution}. Un technicien vous contactera dans les brefs délais pour résoudre votre problème!`
 				//body: `Your next emi of ${dueAmount} is on ${dueDate.toDateString()}.`
 			});
+
 		})
 		.catch(async err => {
 			//console.log('pas coolhhhh : ', err.response);
@@ -226,6 +227,8 @@ app.post('/whatsapp', async function(req, res) {
 			});
 			//agent.add( err.response.data.message ? `${err.response.data.message}` : 'An error occured!!');
 		});
+		res.status(200).end();
+		return
 	}
 	
 	console.log('responses : ', response);
