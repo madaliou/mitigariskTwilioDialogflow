@@ -133,8 +133,8 @@ app.post('/whatsapp', async function(req, res) {
 			let displaySolutions = '\n'
 			let counter = 1;
 			solutions.reverse().forEach(element => {
-				displaySolutions+= counter+' - '+element.name+' \n'
-				counter++
+				displaySolutions+= element.id+' - '+element.name+' \n'
+				//counter++
 			});
 			await twilioClient.messages.create({
 				from: to,
@@ -169,8 +169,8 @@ app.post('/whatsapp', async function(req, res) {
 			let displayCategories = '\n'
 			let counter = 1;
 			categories.reverse().forEach(element => {
-				displayCategories+= counter+' - '+element.name+' \n'
-				counter++
+				displayCategories+= element.id+' - '+element.name+' \n'
+				//counter++
 			});
 			await twilioClient.messages.create({
 				from: to,
