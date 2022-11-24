@@ -26,7 +26,7 @@ const sessionClient = new dialogflow.SessionsClient();
 
 //const botAPI = "http://51.38.57.172:8002/api";
 
-const botAPI = "http://127.0.0.1:8000/api";
+const botAPI = "https://bot.mitigarisk.com/api";
 
 // post request on /whatsapp endpoint
 let allActions = {};
