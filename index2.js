@@ -6,8 +6,6 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 4000;
 const axios = require('axios')
-var _ = require('lodash');
-
 
 // parse request body
 // twilio sends application/x-www-form-urlencoded
@@ -206,16 +204,19 @@ app.post('/whatsapp', async function(req, res) {
 		return
 	}
 
-	let parameters = response[0].queryResult.parameters.fields;
-
-	if(response[0].queryResult.action == 'all-right' && response[0].queryResult.allRequiredParamsPresent){
+	if(response[0].queryResult.fulfillmentText == 'all-right' ){
+		
 		
 		//allActions.gravity == response[0].queryResult.queryText;
-		
+
+		console.log('allActions : ', allActions );
+		let parameters = response[0].queryResult.parameters.fields;
 		let {type, category, gravity } = allActions;
 		console.log('tyype :', type);
-		
 		let payload = {}
+		if(type == '1'){
+			console.log('the type is 1');
+		}
 		/* if(type == '2'){
 			console.log('type == 2')
 			await twilioClient.messages.create({
@@ -227,8 +228,7 @@ app.post('/whatsapp', async function(req, res) {
 			return
 		}
 
-		if(type == '2' && _.isEmpty(parameters) == false){
-
+		if(type == '2'){
 			console.log('type == 2 encore')
 			allActions.lostOfHumanlifes = response[0].queryResult.queryText; 
 
@@ -239,15 +239,15 @@ app.post('/whatsapp', async function(req, res) {
 			});
 			res.status(200).end();
 			return
-		} else{  */
-			
-			payload = {type, category, gravity,
-				description: parameters.description.stringValue,
-				correction : parameters.correction.stringValue,
-				proceedings : parameters.proceedings.stringValue,
-				lostOfHumanlifes: 0,
-				injuries: 0,
-				phoneNumber: from.split(':')[1], platform: from.split(':')[0] };
+		} else{ */
+		console.log('type !!!= 2 ')
+		payload = {type, category, gravity,
+			description: parameters.description.stringValue,
+			correction : parameters.correction.stringValue,
+			proceedings : parameters.proceedings.stringValue,
+			lostOfHumanlifes: 0,
+			injuries: 0,
+			phoneNumber: from.split(':')[1], platform: from.split(':')[0] };
 		//}
 
 		/* allActions.injuries = response[0].queryResult.queryText; 
@@ -259,40 +259,34 @@ app.post('/whatsapp', async function(req, res) {
 			injuries: allActions.injuries,
 			phoneNumber: from.split(':')[1], platform: from.split(':')[0] }; */
 
-		console.log('allActions : ', allActions); 
-		console.log('payload', payload);
-		await axios.post(`${botAPI}/botTickets/`, payload)
-		.then(async resp => {
-			let newTicket = resp.data
-			//console.log('cool : ', resp.data);
-			//agent.add('The Transfert is done successfully');
-			await twilioClient.messages.create({
-				from: to,
-				to: from,
-				body: `Merci,vous venez de reporter un evènement de type ${newTicket.type.name}, vous avez choisi la catégorie ${newTicket.category.name} de le type de gravité ${newTicket.gravity.name}. La description est ${newTicket.description}, les mesures prises sont ${newTicket.proceedings} et la correction proposée est ${newTicket.correction}`
-			});
-			res.status(200).end();
-			return
-
-		})
-		.catch(async err => {
-			//console.log('pas coolhhhh : ', err.response);
-			await twilioClient.messages.create({
-				from: to,
-				to: from,
-				body: err.response.data.message ? `${err.response.data.message}` : 'Une erreur est survenue!!'
-			});
-			res.status(200).end();
-			return
-		}); 
+		/* console.log('allActions : ', allActions);*/
+			console.log('payload : ', payload); 
+			await axios.post(`${botAPI}/botTickets/`, payload)
+			.then(async resp => {
+				let newTicket = resp.data
+				//console.log('cool : ', resp.data);
+				//agent.add('The Transfert is done successfully');
+				await twilioClient.messages.create({
+					from: to,
+					to: from,
+					body: `Merci,vous venez de reporter un evènement de type ${newTicket.type.name}, vous avez choisi la catégorie ${newTicket.category.name} de le type de gravité ${newTicket.gravity.name}. La description est ${newTicket.description}, les mesures prises sont ${newTicket.proceedings} et la correction proposée est ${newTicket.correction}`
+				});
+				res.status(200).end();
+				return
+	
+			})
+			.catch(async err => {
+				//console.log('pas coolhhhh : ', err.response);
+				await twilioClient.messages.create({
+					from: to,
+					to: from,
+					body: err.response.data.message ? `${err.response.data.message}` : 'Une erreur est survenue!!'
+				});
+				res.status(200).end();
+				return
+			}); 
 		
 	}
-
-	if(response[0].queryResult.action == 'lostHumanLifes'){
-		console.log('je suis arrivé');
-	}
-
-
 	
 	console.log('userInput : ', userInput);
 
