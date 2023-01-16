@@ -64,7 +64,7 @@ app.post('/whatsapp', async function(req, res) {
 	let result = response[0].queryResult
 
 	console.log('====================================');
-	console.log('llll : ', response[0].queryResult);
+	console.log('result : ', result);
 	console.log('====================================');
 
 	var userInput = [];
@@ -98,7 +98,7 @@ app.post('/whatsapp', async function(req, res) {
 				await twilioClient.messages.create({
 					from: to,
 					to: from,
-					body: "Sélectionner le type d'évènement : "+displayTypes
+					body: "Salut, je suis Nelly. Quel évènement souhaitez-vous me rapporter ? : "+displayTypes
 				});
 			}else{
 				await twilioClient.messages.create({
@@ -276,7 +276,7 @@ app.post('/whatsapp', async function(req, res) {
 
 		})
 		.catch(async err => {
-			//console.log('pas coolhhhh : ', err.response);
+			console.log('insertion échouée : ', err);
 			await twilioClient.messages.create({
 				from: to,
 				to: from,
@@ -288,9 +288,9 @@ app.post('/whatsapp', async function(req, res) {
 		
 	}
 
-	if(response[0].queryResult.action == 'lostHumanLifes'){
+	/* if(response[0].queryResult.action == 'lostHumanLifes'){
 		console.log('je suis arrivé');
-	}
+	} */
 
 
 	
