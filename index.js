@@ -6,8 +6,6 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 4000;
 const axios = require('axios')
-var _ = require('lodash');
-
 
 // parse request body
 // twilio sends application/x-www-form-urlencoded
@@ -26,8 +24,6 @@ const sessionClient = new dialogflow.SessionsClient();
 
 const botAPI = "http://51.38.57.172:8030/api";
 
-//const botAPI = "https://bot.mitigarisk.com/api/";
-
 // post request on /whatsapp endpoint
 let allActions = {};
 app.post('/whatsapp', async function(req, res) {
@@ -44,9 +40,8 @@ app.post('/whatsapp', async function(req, res) {
 
 	// session for current user
 	const projectId = 'nokia-whatsapp-odue';
-	//const projectId = 'moozi-support-m9dc';
 	const sessionPath = sessionClient.projectAgentSessionPath(projectId, from);
-	//try {
+	
 	// request dialogflow to classify intent
 	const response = await sessionClient.detectIntent({
 		session: sessionPath,
@@ -58,29 +53,14 @@ app.post('/whatsapp', async function(req, res) {
 		}
 	});
 	
-	console.log("Début");
-
-	//console.log('response.queryResult.fulfillmentMessages : ', response[0].queryResult);
-	let result = response[0].queryResult
-
-	console.log('====================================');
-	console.log('result : ', result);
-	console.log('====================================');
-
-	var userInput = [];
-
 	console.log('action : ', response[0].queryResult.action);
 
 	if(response[0].queryResult.action == 'ask.solution' && response[0].queryResult.fulfillmentText != 'category-choice'
 	 && response[0].queryResult.fulfillmentText != 'problem-description' && response[0].queryResult.fulfillmentText != 'all-ok') {
-		//console.log('responses : ', response);
-		userInput.push(body);
 		let solutions = []
-		let payload = {phoneNumber: from.split(':')[1], platform: from.split(':')[0] }
 		
 		await axios.get(`${botAPI}/types`)
 		.then(async resp =>  {
-			console.log('cool bot solutions : ', resp.data);
 			solutions = resp.data
 			var rank = 1;
 			for (var i = 0; i < solutions.length; i++) {
@@ -89,11 +69,9 @@ app.post('/whatsapp', async function(req, res) {
 			}
 			
 			let displayTypes = '\n'
-			let counter = 1;
 			if(solutions.length > 0){
 				solutions.forEach(element => {
 					displayTypes+= element.rank+' - '+element.name+' \n'
-					//counter++
 				});
 				await twilioClient.messages.create({
 					from: to,
@@ -108,10 +86,9 @@ app.post('/whatsapp', async function(req, res) {
 				});
 			}
 			
-			//agent.add('The Transfert is done successfully');
 		})
 		.catch(async err => {
-			console.log('pas coolhhhh : ', err);
+			console.error('Erreur lors de la récupération des types : ', err);
 			await twilioClient.messages.create({
 				from: to,
 				to: from,
@@ -122,19 +99,13 @@ app.post('/whatsapp', async function(req, res) {
 		res.status(200).end();
 		return
 	}
-	if(response[0].queryResult.fulfillmentText == 'select-solution'){
-		/*allActions.solution = response[0].queryResult.queryText;
-		console.log('respo : ', response);*/
-	}
 
 	if(response[0].queryResult.fulfillmentText == 'category-choice'){
-		userInput.push(body);
 		allActions.type = response[0].queryResult.queryText;
 		let categories = []
 				
 		await axios.get(`${botAPI}/categories`)
 		.then(async resp =>  {
-			//console.log('cool bot categories : ', resp.data);
 			categories = resp.data
 			let displayCategories = '\n'
 			var rank = 1;
@@ -142,10 +113,8 @@ app.post('/whatsapp', async function(req, res) {
 				categories[i].rank = rank;
 				rank++;
 			}
-			console.log(categories);
 			categories.forEach(element => {
 				displayCategories+= element.rank+' - '+element.name+' \n'
-				//counter++
 			});
 			await twilioClient.messages.create({
 				from: to,
@@ -154,20 +123,17 @@ app.post('/whatsapp', async function(req, res) {
 			});
 
 		})
-		console.log('responses : ', response[0]);
 		res.status(200).end();
 		return
 
 	}
 
 	if(response[0].queryResult.fulfillmentText == 'gravity-choice'){
-		userInput.push(body);
 		allActions.category = response[0].queryResult.queryText;
 		let gravities = []
 				
 		await axios.get(`${botAPI}/gravities`)
 		.then(async resp =>  {
-			//console.log('cool bot gravities : ', resp.data);
 			gravities = resp.data
 			let displayGravities = '\n'
 			var rank = 1;
@@ -175,10 +141,8 @@ app.post('/whatsapp', async function(req, res) {
 				gravities[i].rank = rank;
 				rank++;
 			}
-			console.log(gravities);
 			gravities.forEach(element => {
 				displayGravities+= element.rank+' - '+element.name+' \n'
-				//counter++
 			});
 			await twilioClient.messages.create({
 				from: to,
@@ -187,15 +151,12 @@ app.post('/whatsapp', async function(req, res) {
 			});
 
 		})
-		console.log('responses : ', response[0]);
 		res.status(200).end();
 		return
 
 	}
 
 	if(response[0].queryResult.fulfillmentText == 'select-injuries'){
-		userInput.push(body);
-		console.log("samedi");
 		allActions.gravity = response[0].queryResult.queryText; 
 		await twilioClient.messages.create({
 			from: to,
@@ -210,62 +171,19 @@ app.post('/whatsapp', async function(req, res) {
 
 	if(response[0].queryResult.action == 'all-right' && response[0].queryResult.allRequiredParamsPresent){
 		
-		//allActions.gravity == response[0].queryResult.queryText;
-		
 		let {type, category, gravity } = allActions;
-		console.log('tyype :', type);
 		
-		let payload = {}
-		/* if(type == '2'){
-			console.log('type == 2')
-			await twilioClient.messages.create({
-				from: to,
-				to: from,
-				body: `Il y'a t'il pertes en vie humaine ? \n 1 - Oui \n 0 - Non `
-			});
-			res.status(200).end();
-			return
-		}
-
-		if(type == '2' && _.isEmpty(parameters) == false){
-
-			console.log('type == 2 encore')
-			allActions.lostOfHumanlifes = response[0].queryResult.queryText; 
-
-			await twilioClient.messages.create({
-				from: to,
-				to: from,
-				body: `Il y'a t'il eu des blessés ? \n 1 - Oui \n 0 - Non `
-			});
-			res.status(200).end();
-			return
-		} else{  */
-			
-			payload = {type, category, gravity,
-				description: parameters.description.stringValue,
-				correction : parameters.correction.stringValue,
-				proceedings : parameters.proceedings.stringValue,
-				lostOfHumanlifes: 0,
-				injuries: 0,
-				phoneNumber: from.split(':')[1], platform: from.split(':')[0] };
-		//}
-
-		/* allActions.injuries = response[0].queryResult.queryText; 
-		payload  = {type, category, gravity,
+		let payload = {type, category, gravity,
 			description: parameters.description.stringValue,
 			correction : parameters.correction.stringValue,
 			proceedings : parameters.proceedings.stringValue,
-			lostOfHumanlifes: allActions.lostOfHumanlifes,
-			injuries: allActions.injuries,
-			phoneNumber: from.split(':')[1], platform: from.split(':')[0] }; */
+			lostOfHumanlifes: 0,
+			injuries: 0,
+			phoneNumber: from.split(':')[1], platform: from.split(':')[0] };
 
-		console.log('allActions : ', allActions); 
-		console.log('payload', payload);
 		await axios.post(`${botAPI}/botTickets/`, payload)
 		.then(async resp => {
 			let newTicket = resp.data
-			//console.log('cool : ', resp.data);
-			//agent.add('The Transfert is done successfully');
 			await twilioClient.messages.create({
 				from: to,
 				to: from,
@@ -276,7 +194,7 @@ app.post('/whatsapp', async function(req, res) {
 
 		})
 		.catch(async err => {
-			console.log('insertion échouée : ', err);
+			console.error('Erreur lors de la création du ticket : ', err);
 			await twilioClient.messages.create({
 				from: to,
 				to: from,
@@ -288,69 +206,10 @@ app.post('/whatsapp', async function(req, res) {
 		
 	}
 
-	/* if(response[0].queryResult.action == 'lostHumanLifes'){
-		console.log('je suis arrivé');
-	} */
-
-
-	
-	console.log('userInput : ', userInput);
-
-	//console.log('action 2 : ', response[0].queryResult.action);
-	/* if(response[0].queryResult.action == 'ask.categorynnnn') {
-		let categories = []
-		await axios.get(`${botAPI}/categories`)
-		.then(async resp =>  {
-			//console.log('cool : ', resp.data);
-			categories = resp.data
-			let displayCategories = '\n'
-			categories.reverse().forEach(element => {
-				displayCategories+= element.id+' - '+element.name+' \n'
-			});
-			await twilioClient.messages.create({
-				from: to,
-				to: from,
-				body: 'Faites un choix parmi ces catégories : '+displayCategories
-			});
-
-			//agent.add('The Transfert is done successfully');
-		})
-		.catch(err => {
-			console.log('pas coolhhhh : ', err);
-			
-		});
-
-		res.status(200).end();
-		return
-
-	} */
-	// handle emi due date action
-	if(response[0].queryResult.action == 'emi.due-date') {
-		// fake emi date and amount
-		let dueDate = new Date();
-		dueDate.setTime(dueDate.getTime() + 5*24*60*60*1000);
-		let dueAmount = "$200";
-
-		// respond to userf
-		await twilioClient.messages.create({
-			from: to,
-			to: from,
-			body: `Your next emi of ${dueAmount} is on ${dueDate.toDateString()}.`
-		});
-
-		res.status(200).end();
-		return
-	}
-
-	//console.log('responses : ', response);
-
 	// forward dialogflow response to user
 	const messages = response[0].queryResult.fulfillmentMessages;
 
-	//console.log('messages : ', messages);
-
 	for (const message of messages) {
-		//console.log('one message : ', message);
 		// normal text message
 		if(message.text) {
 			await twilioClient.messages.create({
